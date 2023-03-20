@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if [ ! -d "log" ]
+then
+ echo "Папки /log не существует"
+ exit 0
+fi
+
+if [ ! -d "backup" ]
+then
+ echo "Папки /backup не существует"
+ exit 0
+fi
+
+null=0
+m_use=20
+cur_use=$(df --output=pcent /home/maks/log | grep -o '[0-9]\+')
+echo "Сейчас папка /log заполнена на $cur_use%"
+
+
+kol_vo_files=5
+if [ $kol_vo_files -le $null ]
+then
+ echo "Нечего архивировать"
+ exit 0
+fi
+
+if [ $cur_use -gt $m_use ]
+then
+ echo "Заполненность больше допущенного значения."
+ echo "Архивация $kol_vo_files старейших файлов в папку backup:"
+ files=$(find log -type f -printf '%T+ %p\n' | sort | head -n $kol_vo_files | awk '{print $2}')
+ 
+ tar cfvz /home/maks/backup/bu-$(date '+%Y-%m-%d_%H-%M').tar.gz $files
+ 
+ rm $files
+ echo "Архивация завершена."
+fi
