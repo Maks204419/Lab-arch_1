@@ -13,12 +13,12 @@ then
 fi
 
 null=0
-m_use=20
+m_use=40
 cur_use=$(df --output=pcent /home/maks/log | grep -o '[0-9]\+')
 echo "Сейчас папка /log заполнена на $cur_use%"
 
 
-kol_vo_files=5
+kol_vo_files=10
 if [ $kol_vo_files -le $null ]
 then
  echo "Нечего архивировать"
